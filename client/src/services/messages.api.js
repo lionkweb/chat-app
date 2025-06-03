@@ -1,7 +1,7 @@
 const API_URL = 'http://localhost:5000/api/messages';
 
-export const getMessages = async () => {
-  const res = await fetch(API_URL);
+export const getMessages = async (roomId) => {
+  const res = await fetch(API_URL + "/" + roomId);
   return res.json();
 };
 
