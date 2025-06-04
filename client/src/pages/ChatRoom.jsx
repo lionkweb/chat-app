@@ -17,22 +17,11 @@ function ChatRoom() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    socket.on('receive_message', (data) => {
-      console.log(messages);
-      setMessages((prev) => [...prev, data]);
-    });
-  }, []);
+
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      const res = await fetch('http://localhost:5000/api/messages', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await res.json();
+    const fetchMessages = async (roomId) => {
+      const data = await getMessages(roomId);
       setMessages(data.messages);
     };
 
@@ -41,6 +30,13 @@ function ChatRoom() {
     }
   }, [token]);
   
+  useEffect(() => {
+    socket.on('receive_message', (data) => {
+      console.log(messages);
+      setMessages((prev) => [...prev, data]);
+    });
+  }, []);
+
   const sendMessage = () => {
     if (message.trim()) {
       socket.emit('send_message', { message: message, roomId: roomId });
@@ -48,10 +44,10 @@ function ChatRoom() {
     }
   };
 
-  const fetchMessages = async () => {
-    const data = await getMessages(roomId);
-    setMessages(data);
-  }
+  // const fetchMessages = async () => {
+  //   const data = await getMessages(roomId);
+  //   setMessages(data);
+  // }
 
   return (
     <>
