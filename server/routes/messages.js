@@ -5,9 +5,10 @@ const router = express.Router();
 const db = require('../db');
 
 // Get messages
-router.get('/:roomId', (req, res) => {
-  const roomId = req.params.roomId;
-  db.query('SELECT * FROM messages WHERE sender IN (?, ?) AND receiver IN (?, ?) AND sender != receiver;', ["han", roomId, "han", roomId], (err, results) => {
+router.get('/:sender/:receiver', (req, res) => {
+  const { sender, receiver } = req.params;
+  console.log(sender, " - ", receiver);
+  db.query('SELECT * FROM messages WHERE sender_id IN (?, ?) AND receiver_id IN (?, ?) AND sender_id != receiver_id;', [sender, receiver, sender, receiver], (err, results) => {
     if (err) return res.status(500).json(err);
     res.json(results);
   });
@@ -15,8 +16,8 @@ router.get('/:roomId', (req, res) => {
 
 // Post message
 router.post('/', (req, res) => {
-  const { user, message } = req.body;
-  db.query('INSERT INTO messages (user, message_content) VALUES (?, ?)', [user, message], (err) => {
+  const { sender_id, receiver_id, message } = req.body;
+  db.query('INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)', [sender_id, receiver_id, message], (err) => {
     if (err) return res.status(500).json(err);
     res.json({ success: true });
   });

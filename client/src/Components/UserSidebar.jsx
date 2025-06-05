@@ -31,7 +31,7 @@ function UserSidebar() {
               data-tooltip-id={`tooltip_${user.id}`}
               data-tooltip-content={`Please have a chat with "${user.name}"`}
               
-              to={`/chat/${user.name}`}
+              to={`/chat/${user.id}`}
               className="border w-10 h-10 rounded-full first-letter:uppercase text-center leading-10">
             {getFirstLetters(user.name)}
           </Link>
