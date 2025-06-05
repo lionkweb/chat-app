@@ -1,9 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import { getMessages } from '../services/messages.api';
 import { format } from 'date-fns';
+import io from 'socket.io-client';
+
+import { getMessages } from '../services/messages.api';
+import { getUserById } from "../services/users.api";
 
 import Navbar from "../Components/Navbar";
 import UserSidebar from "../Components/UserSidebar";
@@ -17,19 +19,21 @@ function ChatRoom() {
   const { receiver_id } = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [receiver, setReceiver] = useState('');
   let sender_id;
   // const sender_id = useSelector((state) => state.user.user.id);
   useEffect(() => {
     const fetchMessages = async (rec_id) => {
       if (!token) {
-        navigate('/login');
+        // navigate('/login');
       }
       sender_id = user.id;
-      console.log(sender_id, rec_id);
-      const data = await getMessages(sender_id, rec_id);
+      console.log(user.id, rec_id);
+      const data = await getMessages(user.id, rec_id);
+      // console.log(await getUserById(rec_id));
+      setReceiver(await getUserById(rec_id))
       setMessages(data);
     };
-
     if (token) {
       fetchMessages(receiver_id);
     }
@@ -38,18 +42,21 @@ function ChatRoom() {
   useEffect(() => {
     socket.on('receive_message', (data) => {
       setMessages((prev) => [...prev, data]);
+      // setMessages([data]);
     });
   }, []);
 
   const sendMessage = () => {
     if (message.trim()) {
-      socket.emit('send_message', { sender_id: sender_id, receiver_id: receiver_id, message: message });
+      socket.emit('send_message', { sender_id: user.id, receiver_id: receiver_id, message: message });
       setMessage('');
     }
   };
 
   const changeDateFormat = (full_date) => {
-    return format(new Date(full_date), 'yyyy/MM/dd - hh:mm:ss');
+    const parsed = new Date(full_date);
+    if (!parsed || isNaN(parsed)) return ''; // or return 'Invalid date'
+    return format(new Date(full_date), 'yyyy/MM/dd-hh:mm:ss');
   }
 
   // const fetchMessages = async () => {
@@ -73,12 +80,12 @@ function ChatRoom() {
                 {
                   msg.receiver_id == receiver_id ? (
                     <div className="bg-red-100 p-2 rounded w-3/5 ml-auto">
-                      <span>{msg.message}, {idx}</span>
-                      {/* <div className="text-right">{ changeDateFormat(msg.created_at) }</div> */}
+                      <span>{msg.message}</span>
+                      <div className="text-right">{ changeDateFormat(msg.created_at) }</div>
                     </div>
                   ) : (
                     <div className="bg-blue-100 p-2 rounded w-3/5">
-                      <span>{msg.message}, {idx}</span>
+                      <span>{msg.message}</span>
                       {/* <div className="text-right">{ changeDateFormat(msg.created_at) }</div> */}
                     </div>
                   )
@@ -90,6 +97,7 @@ function ChatRoom() {
             <input
               className="flex-1 border p-2 rounded-l"
               value={message}
+              placeholder={`Please chat to ${receiver.name}`}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             />

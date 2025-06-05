@@ -13,12 +13,10 @@ function initSocket(server) {
     console.log('User connected:', socket.id);
 
     socket.on('send_message', (data) => {
-      // console.log('Received message:', data);
       io.emit('receive_message', data);
-      let sender = "choe"; // You can enhance this later
       db.query(
-        'INSERT INTO messages (sender, message, roomId) VALUES (?, ?, ?)',
-        [sender, data.message, data.roomId],
+        'INSERT INTO messages (sender_id, receiver_id, message) VALUES (?, ?, ?)',
+        [data.sender_id, data.receiver_id, data.message],
         (err) => {
           if (err) {
             console.error('DB insert error:', err);

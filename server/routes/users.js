@@ -10,5 +10,13 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  db.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
+    if (err) return res.status(500).json(err);
+    res.json(results[0]);
+  });
+})
+
 module.exports = router;
 
