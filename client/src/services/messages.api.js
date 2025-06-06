@@ -3,13 +3,6 @@ import { store } from '../app/store';
 const API_URL = 'http://localhost:5000/api/messages';
 
 export const getMessages = async (sender_id, receiver_id, options = {}) => {
-  // const res = await fetch(API_URL + "/" + receiver_id);
-  // const token = store.getState().user.token;
-  // const headers = {
-  //   ...(options.headers || {}),
-  //   Authorization: `Bearer ${token}`,
-  //   'Content-Type': 'application/json',
-  // };
   const res = await fetch(`${API_URL}/${sender_id}/${receiver_id}`, {});
 
   if (!res.ok) {

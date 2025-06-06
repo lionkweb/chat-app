@@ -13,23 +13,16 @@ import UserSidebar from "../Components/UserSidebar";
 const socket = io('http://localhost:5000');
 
 function ChatRoom() {
-  // function Chat() {
   const navigate = useNavigate();
   const { user, token } = useSelector((state) => state.user);
   const { receiver_id } = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [receiver, setReceiver] = useState('');
-  // const sender_id = useSelector((state) => state.user.user.id);
   useEffect(() => {
     const fetchMessages = async (rec_id) => {
-      if (!token) {
-        // navigate('/login');
-      }
-      // sender_id = user.id;
       console.log(user.id, rec_id);
       const data = await getMessages(user.id, rec_id);
-      // console.log(await getUserById(rec_id));
       setReceiver(await getUserById(rec_id))
       setMessages(data);
     };
@@ -41,7 +34,6 @@ function ChatRoom() {
   useEffect(() => {
     socket.on('receive_message', (data) => {
       setMessages((prev) => [...prev, data]);
-      // setMessages([data]);
     });
   }, []);
 
@@ -54,21 +46,15 @@ function ChatRoom() {
 
   const changeDateFormat = (full_date) => {
     const parsed = new Date(full_date);
-    if (!parsed || isNaN(parsed)) return ''; // or return 'Invalid date'
+    if (!parsed || isNaN(parsed)) return ''; 
     return format(new Date(full_date), 'yyyy/MM/dd-hh:mm:ss');
   }
-
-  // const fetchMessages = async () => {
-  //   const data = await getMessages(receiver_id);
-  //   setMessages(data);
-  // }
 
   return (
     <>
       <Navbar />
       <UserSidebar />
       <div className="ml-[56px] pt-[56px] pb-[16px] h-dvh px-6 flex flex-col items-center justify-center h-screen bg-gray-100">
-        {/* <div>Chat Room ID: {receiver_id}</div> */}
         <div className="flex flex-col mt-6 h-full w-full max-w-full p-4 bg-white shadow rounded">
           <div className="overflow-y-auto mb-4 p-2 mt-auto">
             {messages.map((msg, idx) => (
@@ -85,7 +71,7 @@ function ChatRoom() {
                   ) : (
                     <div className="bg-blue-100 p-2 rounded w-3/5">
                       <span>{msg.message}</span>
-                      {/* <div className="text-right">{ changeDateFormat(msg.created_at) }</div> */}
+                      <div className="text-right">{ changeDateFormat(msg.created_at) }</div>
                     </div>
                   )
                 }

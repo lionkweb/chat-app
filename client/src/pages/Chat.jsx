@@ -20,7 +20,6 @@ function Chat() {
   const fetchRooms = async () => {
     const data = await getRooms();
     setRooms(data);
-    // console.log(data);
   }
 
   const createNewRoom = () => {
