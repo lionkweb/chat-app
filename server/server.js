@@ -6,7 +6,7 @@ const roomRoutes = require('./routes/rooms');
 const userRoutes = require('./routes/users');
 const loginRoutes = require('./routes/login');
 const authRoutes = require('./routes/auth');
-const initSocket = require('./socket'); // Import socket setup
+const initSocket = require('./socket'); 
 
 require('dotenv').config();
 

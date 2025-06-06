@@ -16,8 +16,7 @@ router.post('/login', (req, res) => {
 
     const user = results[0];
     console.log(user.password)
-    const isMatch = await bcrypt.compare(password, user.password); // user.password is hashed
-    // const isMatch = await bcrypt.compare(password, hashed); // user.password is hashed
+    const isMatch = await bcrypt.compare(password, user.password); 
     console.log("isMatch = ", isMatch);
     if (!isMatch) return res.status(401).json({ message: 'Wrong password' });
     const token = jwt.sign({ id: user.id}, process.env.JWT_SECRET, {
