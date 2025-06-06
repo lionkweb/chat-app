@@ -20,14 +20,13 @@ function ChatRoom() {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [receiver, setReceiver] = useState('');
-  let sender_id;
   // const sender_id = useSelector((state) => state.user.user.id);
   useEffect(() => {
     const fetchMessages = async (rec_id) => {
       if (!token) {
         // navigate('/login');
       }
-      sender_id = user.id;
+      // sender_id = user.id;
       console.log(user.id, rec_id);
       const data = await getMessages(user.id, rec_id);
       // console.log(await getUserById(rec_id));
