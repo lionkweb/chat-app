@@ -69,7 +69,7 @@ function ChatRoom() {
                       <div className="text-right">{ changeDateFormat(msg.created_at) }</div>
                     </div>
                   ) : (
-                    <div className="bg-blue-100 p-2 rounded w-3/5">
+                    <div className="bg-green-100 p-2 rounded w-3/5">
                       <span>{msg.message}</span>
                       <div className="text-right">{ changeDateFormat(msg.created_at) }</div>
                     </div>
