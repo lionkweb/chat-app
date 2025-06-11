@@ -82,7 +82,7 @@ function ChatRoom() {
             <input
               className="flex-1 border p-2 rounded-l"
               value={message}
-              placeholder={`Please chat to ${receiver.name}`}
+              placeholder={`Please chat to ${receiver.name}.`}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             />
